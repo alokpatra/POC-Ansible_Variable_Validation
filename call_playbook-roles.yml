@@ -1,0 +1,11 @@
+- hosts: servers
+  gather_facts: no
+  pre_tasks:
+    - name: Check if variable are passed in extra_vars
+      fail:
+        msg: "Variable '{{ item }}' is not defined"
+      when: item not in vars
+      with_items: "{{ required_vars }}"
+
+  roles:
+    - roles

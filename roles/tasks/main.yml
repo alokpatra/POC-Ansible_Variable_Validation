@@ -1,0 +1,61 @@
+---
+# This tasks uses the variable var1 which needs to be passsed in extra vars.
+# Task fails if variable doesnt have a values
+# Task status is 'changed' if variable has a value
+# Task is changed if var1 is passed in extra vars, else it skips the tasks
+- name: Use variable var1
+  set_fact:
+    variable1: "{{ var1 }}"
+
+- name: Use variable var2
+  set_fact:
+    variable1: "{{ var2 }}"
+
+- name: Variable being used is listed in "{{ item }}"
+  debug:
+    msg: "{{ item }}"
+  with_items:  "{{ required_vars }}"
+
+# - name: Include variable file
+#   include_vars: 'vars/input-variables.yml'
+
+# If variables mentioned in required_vars are NOT passed as extra_vars the task fails.
+# Else it skips the task
+# - name: Check the required variables
+#   fail:
+#     msg: "Variable '{{ item }}' is not defined"
+#   when: item not in vars
+#   with_items: "{{ required_vars }}"
+
+# - name: Check if variable {{ var1 }} is prompted.
+#   vars:
+#     var1: 10
+#   shell: echo "This certainly is epic!"
+#   when: var1 is defined
+
+# valiate if the variable var1 is defined
+# Task is changed if var1 is passed in extra vars, else it skips the tasks
+# - name: Check if variable var1 {{ var1 }} is prompted.
+#   shell: echo "This certainly is epic!"
+#   register: defined_status
+#   when: var1 is defined or ( var1 is defined and var1 != "" )
+
+# valiate if the variable var1 is defined
+# Task is changed if var1 is passed in extra vars, else it skips the tasks
+# - name: Check if variable var1 {{ var1 }} is prompted.
+#   shell: echo "This certainly is epic!"
+#   register: defined_status
+
+
+
+# If var1 is passed in extra vars param then execute this task.
+# You can execute this task in #2 itself. this for demo purpose how you can register
+# - name: Execute task if var1 is defined
+#   command: echo 'Variable is defined'
+#   when: defined_status | changed
+
+# Displays a failure msg when variable not defined
+# - name: Execute task if var1 is NOT defined
+#   fail:
+#     msg: "var1 is not passed or blank"
+#   when: param1 is not defined or ( param1 is defined and param1 == "" )

@@ -1,0 +1,2 @@
+[servers]
+34.228.23.155 ansible_ssh_user=ec2-user
