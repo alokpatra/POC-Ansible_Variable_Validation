@@ -1,11 +1,48 @@
 - hosts: servers
-  gather_facts: no
+  # gather_facts: no
   pre_tasks:
-    - name: Check if variable are passed in extra_vars
+
+    # Listing out the variables and their values
+    - name: Debug the variables
+      debug:
+        var: "{{ item }}"
+      with_items: "{{ required_vars }}"
+
+    # Checking in the variables defined in the playbook have been assigned a value in extra_args
+    # - name: Check if variable are passed in extra_vars
+    #   fail:
+    #     msg: "Variable '{{ item }}' is not present in extra_args"
+    #   when: item not in vars
+    #   with_items: "{{ required_vars }}"
+
+    # Checking in the variables defined in the playbook have been assigned a value in extra_args
+    - name: Check if variable are defined in extra_vars
       fail:
-        msg: "Variable '{{ item }}' is not defined"
+        msg: "Variable '{{ item }}' is not defined in extra_args"
       when: item not in vars
       with_items: "{{ required_vars }}"
+
+    # Checking if the value passed to extra_args are of type string.
+    # Also handles null values passed to variables
+    - name: Check if variable are of type string
+      fail:
+        msg: "Variable '{{ item }}' is not a string"
+      when: "{{ item }} is not string"
+      with_items: "{{ required_vars }}"
+
+    # - name: Check if the variables are of type String
+    #   validate:
+    #   args:
+    #     value: var1
+    #     input_type: string
+    #   # with_items: "{{ required_vars }}"
+
+    # - name: Using assert to check if variable is defined
+    #   assert:
+    #     msg: The variable is either a int or boolean
+    #     that:
+    #       - "{{ item }} is defined"
+    #   with_items: "{{ required_vars }}"
 
   roles:
     - roles

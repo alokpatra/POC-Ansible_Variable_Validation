@@ -16,6 +16,12 @@
     msg: "{{ item }}"
   with_items:  "{{ required_vars }}"
 
+- vars:
+    var4: 10
+  name: Debug var4
+  debug:
+    var: var4
+
 # - name: Include variable file
 #   include_vars: 'vars/input-variables.yml'
 
