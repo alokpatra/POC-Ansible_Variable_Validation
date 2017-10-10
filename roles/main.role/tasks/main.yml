@@ -11,27 +11,26 @@
   set_fact:
     variable1: "{{ var2 }}"
 
-- name: Variable being used is listed in "{{ item }}"
-  debug:
-    msg: "{{ item }}"
-  with_items:  "{{ required_vars }}"
-
-- vars:
-    var4: 10
-  name: Debug var4
+# Providing the var4 a local value and overiding the same by passing value as extra_args
+- name: Debug var4
   debug:
     var: var4
+
+# Providing the var4 a local value and overiding the same by passing value as extra_args
+- name: Debug var5
+  debug:
+    var: var5
 
 # - name: Include variable file
 #   include_vars: 'vars/input-variables.yml'
 
-# If variables mentioned in required_vars are NOT passed as extra_vars the task fails.
+# If variables mentioned in required_string_vars are NOT passed as extra_vars the task fails.
 # Else it skips the task
 # - name: Check the required variables
 #   fail:
 #     msg: "Variable '{{ item }}' is not defined"
 #   when: item not in vars
-#   with_items: "{{ required_vars }}"
+#   with_items: "{{ required_string_vars }}"
 
 # - name: Check if variable {{ var1 }} is prompted.
 #   vars:

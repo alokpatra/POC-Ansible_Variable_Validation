@@ -1,0 +1,17 @@
+required_string_vars:
+  - var1
+  - var2
+  - var3
+  - var4
+
+# required_object_vars:
+#   - var3
+
+# required_dict_vars:
+#   - var4
+
+required_integer_vars:
+  - var5
+
+required_boolean_vars:
+  - var6
