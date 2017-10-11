@@ -4,7 +4,9 @@
     - arguments-list.yml
 
   pre_tasks:
-
+    ###########################
+    ### DEBUG THE VARIABLES ###
+    ###########################
     # Listing out the variables and their values
     - name: Debug the variables
       debug:
@@ -13,9 +15,11 @@
         - "{{ required_string_vars }}"
         - "{{ required_integer_vars }}"
         - "{{ required_boolean_vars }}"
+        - "{{ optional_string_vars }}"
 
-
-
+  ##################################################
+  ### CHECK IF DEFINED AND PASSSED IN EXTRA_ARGS ###
+  ##################################################
     # Check if variable is defined in extra_args
     - name: Check if variable are defined in extra_vars
       fail:
@@ -27,6 +31,9 @@
         - "{{ required_boolean_vars }}"
 
 
+  ##################################
+  ### CHECK FOR REQUIRED STRINGS ###
+  ##################################
     # Checking if the value passed to extra_args are of type string.
     # Also handles null values passed to variables
     - name: Check if variable are of type string
@@ -35,6 +42,9 @@
       when: "{{ item }} is not string"
       with_items: "{{ required_string_vars }}"
 
+  #########################
+  ### CHECK FOR BOOLEAN ###
+  #########################
     # Checking if the value passed to extra_args are of type boolean.
     # Also handles null values passed to variables
     - name: Check if variable are of type boolean
@@ -43,22 +53,25 @@
         msg: "Variable {{ item }} is not of type boolean"
       with_items: "{{ required_boolean_vars }}"
 
-    # Checking if the value passed to extra_args are of type int.
-    # Also handles null values passed to variables
+
+  #########################
+  ### CHECK FOR INTEGER ###
+  #########################
+    # The following check accepts input value of true or false as well since they evaluate to 0 or 1
+    # Checking if the value passed to extra_args is a number (integer or float both are accepted)
     - name: Check if variable are of type number
       fail:
         msg: "Variable '{{ item }}' is not of integer"
       when:
+        # This allows 0 or 1 or any boolean valaue as well
+        - "{{ item }} is not number"
+
         # # This does not allow 0 or 1 or any boolean a=vlaue as well
         # - "{{ item }} is not number or {{ item }} == false or {{ item }} == true"
-
-        # This allows 0 or 1 or any boolean a=vlaue as well
-        - "{{ item }} is not number"
       with_items: "{{ required_integer_vars }}"
       register: result
 
-    # Checking if the value passed to extra_args are of type int.
-    # Also handles null values passed to variables
+    # Checking if the value is NOT a float and a integer
     - name: Check if variable are of type integer and not floating
       fail:
         msg: "Variable '{{ item }}' is of type float"
@@ -66,8 +79,30 @@
         - result|succeeded
         - "{{ item }} is not divisibleby(1)"
       with_items: "{{ required_integer_vars }}"
-      # register: result
 
+  ##################################
+  ### CHECK FOR OPTIONAL STRINGS ###
+  ##################################
+    # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
+    - name: Check if optional string variables are of type string
+      fail:
+        msg: "Variable '{{ item }}' is not of string"
+      when: "{{ item }} is not string"
+      with_items: "{{ optional_string_vars }}"
+
+  ############################
+  ### CHECK FOR DICTIONARY ###
+  ############################
+    # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
+    - name: Check if variable are of type dict
+      fail:
+        msg: "Variable '{{ item }}' is not of dictionary"
+      when: "{{ item }} is not dict"
+      with_items: "{{ required_dict_vars }}"
+
+  #######################
+  ### SCRAPPED CHECKS ###
+  #######################
     # # Checking if the value passed to extra_args are of type dictionary.
     # # Also handles null values passed to variables
     # - name: Check if variable are of type dictionary
@@ -79,37 +114,12 @@
     # Checking if the value passed to extra_args are of type boolean.
     # Also handles null values passed to variables
     # - name: Check if variable are of type boolean
-    #   fail:
-    #     msg: "Variable '{{ item }}' is not a boolean"
-    #   when:
-    #     - item != true or item != false
-    #     # - item != true
-    #     # - item != true
-    #   with_items: "{{ required_boolean_vars }}"
-
-    # Checking if the value passed to extra_args are of type boolean.
-    # Also handles null values passed to variables
-    # - name: Check if variable are of type boolean
-    #   validate:
-    #   args:
-    #     value: "{{ item }}"
-    #     whitelist:
-    #       - 'true'
-    #       - 'false'
-    #       - true
-    #       - false
-    #   with_items: "{{ required_boolean_vars }}"
-
-    # Checking if the value passed to extra_args are of type boolean.
-    # Also handles null values passed to variables
-    # - name: Check if variable are of type boolean
     #   validate:
     #   args:
     #     value: "{{ item }}"
     #     input_type: bool
     #   with_items: "{{ required_boolean_vars }}"
-# the above is NOT working as it's considering the item as type sting. If we cast by writing item|bool it considers any non empty string as true
-
+    # the above is NOT working as it's considering the item as type sting. If we cast by writing item|bool it considers any non empty string as true
 
     # # Checking if the value passed to extra_args are of type string.
     # # Also handles null values passed to variables
@@ -118,6 +128,18 @@
     #     msg: "Variable var 5 is not a string"
     #   when: "var5 is not string"
     #   # with_items: "{{ required_string_vars }}"
+
+
+  ######################################
+  ### CHECK FOR BOOLEAN USING SAMEAS ###
+  ######################################
+    # Checking if the value passed to extra_args are of type boolean.
+    # Also handles null values passed to variables
+    # - name: Check if variable are of type boolean
+    #   fail:
+    #     msg: "Variable {{ item }} is not of type boolean"
+    #   when:  "not (item is sameas false or item is sameas true)"
+    #   with_items: "{{ required_boolean_vars }}"
 
   roles:
     - main.role

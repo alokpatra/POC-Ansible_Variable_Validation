@@ -1,7 +1,8 @@
 var1: Alok1
 var2: Alok2
 var3: Alok3
-var4: Alok4
-var5: 10.2.3
+var4: 10.1.3
+var5: 10
 var6: false
+# optional_string_var_1: 10
 # var7: {"alok":"patra"}
