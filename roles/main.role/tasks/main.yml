@@ -21,6 +21,16 @@
   debug:
     var: var5
 
+# Providing the var4 a local value and overiding the same by passing value as extra_args
+- name: Debug dict string
+  debug:
+    var: employee_name.first_name
+
+# Providing the var4 a local value and overiding the same by passing value as extra_args
+- name: Debug dict string
+  debug:
+    var: employee_name.last_name
+
 # - name: Include variable file
 #   include_vars: 'vars/input-variables.yml'
 

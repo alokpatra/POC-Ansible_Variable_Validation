@@ -1,1 +1,4 @@
-optional_string_var_1: alok-optional
+optional_string_var_1: optional
+employee_name:
+  first_name: Amol
+  last_name: Khano

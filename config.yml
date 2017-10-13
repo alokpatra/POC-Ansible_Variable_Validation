@@ -6,3 +6,8 @@ var5: 10
 var6: false
 # optional_string_var_1: 10
 # var7: {"alok":"patra"}
+employee_name:
+  first_name: Alok
+  last_name: Patra
+# employee_name.first_name: Alok
+# employee_name.last_name: Patra

@@ -2,6 +2,7 @@
   gather_facts: no
   vars_files:
     - arguments-list.yml
+    - 'roles/main.role/defaults/main.yml'
 
   pre_tasks:
     ###########################
@@ -12,23 +13,56 @@
       debug:
         var: "{{ item }}"
       with_items:
-        - "{{ required_string_vars }}"
-        - "{{ required_integer_vars }}"
         - "{{ required_boolean_vars }}"
+        - "{{ required_integer_vars }}"
+        - "{{ required_string_vars }}"
         - "{{ optional_string_vars }}"
+        - "{{ required_dict_string_vars }}"
+
+
+  # ##################################################
+  # ### CHECK IF DEFINED AND PASSSED IN EXTRA_ARGS ###
+  # ##################################################
+  #   # Check if variable is defined in extra_args
+    - name: Check if variables are in extra_args
+      assert:
+        that: "{{ item }} is defined"
+        msg: "Variable {{ item }} is not defined"
+      with_items:
+        - "{{ required_boolean_vars }}"
+        - "{{ required_integer_vars }}"
+        - "{{ required_string_vars }}"
+
 
   ##################################################
   ### CHECK IF DEFINED AND PASSSED IN EXTRA_ARGS ###
   ##################################################
     # Check if variable is defined in extra_args
-    - name: Check if variable are defined in extra_vars
-      fail:
-        msg: "Variable '{{ item }}' is not defined in extra_args"
-      when: item not in vars
-      with_items:
-        - "{{ required_string_vars }}"
-        - "{{ required_integer_vars }}"
-        - "{{ required_boolean_vars }}"
+    # - name: Check if variable are defined in extra_vars
+    #   fail:
+    #     msg: "Variable '{{ item }}' is not defined in extra_args"
+    #   when: item not in vars
+    #   with_items:
+    #     - "{{ required_boolean_vars }}"
+    #     - "{{ required_integer_vars }}"
+    #     - "{{ required_string_vars }}"
+    #     - "{{required_dict_string_vars}}"
+
+    ################################
+    ### DEBUG THE DICT VARIABLES ###
+    ################################
+    # Listing out the variables and their values
+    # - name: Debug the dict variables
+    #   debug:
+    #     var: "{{ item.key }}"
+    #   with_dict: "{{ required_dict_vars }}"
+      # var: "{{ item.key}}"
+      # msg: "the value is : {{ item}}"
+      # var: "{{ item[] }}.*:ALL"
+      # var: "{{ item[1] }}"
+      # with_nested:
+      #   - "{{ required_dict_string_vars }}"
+        # - "{{ required_dict_string_vars }}"
 
 
   ##################################
@@ -90,15 +124,25 @@
       when: "{{ item }} is not string"
       with_items: "{{ optional_string_vars }}"
 
+  ####################################
+  ### CHECK FOR DICTIONARY STRINGS ###
+  ####################################
+    # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
+    # - name: Check if dictionary string variables are of type string
+    #   fail:
+    #     msg: "Variable '{{ item }}' is not of string"
+    #   when: "{{ item }} is not string"
+    #   with_items: "{{ required_dict_string_vars }}"
+
   ############################
   ### CHECK FOR DICTIONARY ###
   ############################
     # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
-    - name: Check if variable are of type dict
-      fail:
-        msg: "Variable '{{ item }}' is not of dictionary"
-      when: "{{ item }} is not dict"
-      with_items: "{{ required_dict_vars }}"
+    # - name: Check if variable are of type dict
+    #   fail:
+    #     msg: "Variable '{{ item }}' is not of dictionary"
+    #   when: "{{ item }} is not dict"
+    #   with_items: "{{ required_dict_vars }}"
 
   #######################
   ### SCRAPPED CHECKS ###
@@ -141,5 +185,10 @@
     #   when:  "not (item is sameas false or item is sameas true)"
     #   with_items: "{{ required_boolean_vars }}"
 
-  roles:
-    - main.role
+  # roles:
+  #   - main.role
+  tasks:
+  - name: Include the main role to be executed
+    include_role:
+      name: main.role
+      vars_from: roles/main.role/defaults/main.yml
