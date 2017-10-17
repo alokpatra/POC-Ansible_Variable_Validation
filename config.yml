@@ -9,5 +9,14 @@ var6: false
 employee_name:
   first_name: Alok
   last_name: Patra
-# employee_name.first_name: Alok
-# employee_name.last_name: Patra
+
+# hostnames_:
+#   host1: "0"
+#   host2: "1"
+# # employee_name.first_name: Alok
+# # employee_name.last_name: Patra
+#
+# db:
+#   jiradb:
+#     - srvsgrhojdbcsa1
+#     - srvsgrhojdbcsa2

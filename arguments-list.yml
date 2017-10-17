@@ -10,7 +10,7 @@ required_string_vars:
 #   - var3
 
 # required_dict_vars:
-#   - var4
+#   - db
 
 required_integer_vars:
   - var5
@@ -21,12 +21,12 @@ required_boolean_vars:
 optional_string_vars:
   - optional_string_var_1
 
-required_dict_string_vars:
-  # - employee_name.first_name
-  # - employee_name.last_name
-  - employee_name['first_name']
-  - employee_name['last_name']
-
-
-required_dict_vars:
-  - employee_name
+# required_dict_string_vars:
+#   # - employee_name.first_name
+#   # - employee_name.last_name
+#   - employee_name['first_name']
+#   - employee_name['last_name']
+#
+#
+# required_dict_vars:
+#   - employee_name

@@ -17,7 +17,7 @@
         - "{{ required_integer_vars }}"
         - "{{ required_string_vars }}"
         - "{{ optional_string_vars }}"
-        - "{{ required_dict_string_vars }}"
+        # - "{{ required_dict_string_vars }}"
 
 
   # ##################################################
@@ -87,7 +87,6 @@
         msg: "Variable {{ item }} is not of type boolean"
       with_items: "{{ required_boolean_vars }}"
 
-
   #########################
   ### CHECK FOR INTEGER ###
   #########################
@@ -141,8 +140,14 @@
     # - name: Check if variable are of type dict
     #   fail:
     #     msg: "Variable '{{ item }}' is not of dictionary"
-    #   when: "{{ item }} is not dict"
+    #   when: "{{ item }} is not mapping"
     #   with_items: "{{ required_dict_vars }}"
+    #
+    # - name: Check if variable are of type dict
+    #   assert:
+    #     that: "{{ item }}' is string"
+    #     msg: "Variable{{ item }} is not string"
+    #   with_item: "{{ required_dict_vars }}"
 
   #######################
   ### SCRAPPED CHECKS ###
