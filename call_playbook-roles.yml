@@ -17,8 +17,8 @@
         - "{{ required_integer_vars }}"
         - "{{ required_string_vars }}"
         - "{{ optional_string_vars }}"
+        - "{{ required_dict_vars }}"
         # - "{{ required_dict_string_vars }}"
-
 
   # ##################################################
   # ### CHECK IF DEFINED AND PASSSED IN EXTRA_ARGS ###
@@ -32,37 +32,6 @@
         - "{{ required_boolean_vars }}"
         - "{{ required_integer_vars }}"
         - "{{ required_string_vars }}"
-
-
-  ##################################################
-  ### CHECK IF DEFINED AND PASSSED IN EXTRA_ARGS ###
-  ##################################################
-    # Check if variable is defined in extra_args
-    # - name: Check if variable are defined in extra_vars
-    #   fail:
-    #     msg: "Variable '{{ item }}' is not defined in extra_args"
-    #   when: item not in vars
-    #   with_items:
-    #     - "{{ required_boolean_vars }}"
-    #     - "{{ required_integer_vars }}"
-    #     - "{{ required_string_vars }}"
-    #     - "{{required_dict_string_vars}}"
-
-    ################################
-    ### DEBUG THE DICT VARIABLES ###
-    ################################
-    # Listing out the variables and their values
-    # - name: Debug the dict variables
-    #   debug:
-    #     var: "{{ item.key }}"
-    #   with_dict: "{{ required_dict_vars }}"
-      # var: "{{ item.key}}"
-      # msg: "the value is : {{ item}}"
-      # var: "{{ item[] }}.*:ALL"
-      # var: "{{ item[1] }}"
-      # with_nested:
-      #   - "{{ required_dict_string_vars }}"
-        # - "{{ required_dict_string_vars }}"
 
 
   ##################################
@@ -123,6 +92,24 @@
       when: "{{ item }} is not string"
       with_items: "{{ optional_string_vars }}"
 
+
+  ###################################
+  ### CHECK FOR LIST INDSIDE DICT ###
+  ###################################
+    - name: Assert check for variables with list as value of DICT
+      assert:
+        that: item is string
+        msg: Variable is not of type string
+      with_items: "{{ db.values() }}"
+
+  ############################################
+  ### CALL SEPARATE ROLE FOR DICT STRINGS ####
+  ############################################
+    - name: Call the role for input validation
+      include_role:
+        name: Input-Validation
+
+
   ####################################
   ### CHECK FOR DICTIONARY STRINGS ###
   ####################################
@@ -137,17 +124,18 @@
   ### CHECK FOR DICTIONARY ###
   ############################
     # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
-    # - name: Check if variable are of type dict
-    #   fail:
-    #     msg: "Variable '{{ item }}' is not of dictionary"
-    #   when: "{{ item }} is not mapping"
-    #   with_items: "{{ required_dict_vars }}"
-    #
-    # - name: Check if variable are of type dict
+    # - name: Check if variable inside dict
     #   assert:
-    #     that: "{{ item }}' is string"
-    #     msg: "Variable{{ item }} is not string"
-    #   with_item: "{{ required_dict_vars }}"
+    #     that: "{{ item }} is string"
+    #     msg: "Variable '{{ item }}' is not of dictionary"
+    #   with_items:
+    #     - "{{ required_dict_vars }}"
+
+    # - name: Check if variable inside dict are string
+    #   assert:
+    #     that: "{{ item }} is string"
+    #     msg: "Variable{{ item }} is NOT string"
+    #   with_nested: "{{ required_dict_vars['jiradb'] }}"
 
   #######################
   ### SCRAPPED CHECKS ###

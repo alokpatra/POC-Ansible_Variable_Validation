@@ -1,0 +1,11 @@
+---
+###########################################
+### ASSERT THE VALUES OF DICT VARIABLES ###
+###########################################
+- name: Assertion Check if variable are of type string
+  assert:
+    that: item is string
+    msg: "The variable is not of type string"
+  with_items:
+    - "{{ employee_name.values() }}"
+    - "{{ severName.values() }}"

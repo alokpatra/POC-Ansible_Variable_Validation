@@ -10,7 +10,7 @@ required_string_vars:
 #   - var3
 
 # required_dict_vars:
-#   - db
+#   - hostnames_['*:ALL']
 
 required_integer_vars:
   - var5
@@ -28,5 +28,6 @@ optional_string_vars:
 #   - employee_name['last_name']
 #
 #
-# required_dict_vars:
-#   - employee_name
+required_dict_vars:
+  - employee_name
+  - severName
