@@ -110,33 +110,6 @@
         name: Input-Validation
 
 
-  ####################################
-  ### CHECK FOR DICTIONARY STRINGS ###
-  ####################################
-    # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
-    # - name: Check if dictionary string variables are of type string
-    #   fail:
-    #     msg: "Variable '{{ item }}' is not of string"
-    #   when: "{{ item }} is not string"
-    #   with_items: "{{ required_dict_string_vars }}"
-
-  ############################
-  ### CHECK FOR DICTIONARY ###
-  ############################
-    # Checks datatype of variables NOT passed as extra_args but defined inside the playbook.
-    # - name: Check if variable inside dict
-    #   assert:
-    #     that: "{{ item }} is string"
-    #     msg: "Variable '{{ item }}' is not of dictionary"
-    #   with_items:
-    #     - "{{ required_dict_vars }}"
-
-    # - name: Check if variable inside dict are string
-    #   assert:
-    #     that: "{{ item }} is string"
-    #     msg: "Variable{{ item }} is NOT string"
-    #   with_nested: "{{ required_dict_vars['jiradb'] }}"
-
   #######################
   ### SCRAPPED CHECKS ###
   #######################
